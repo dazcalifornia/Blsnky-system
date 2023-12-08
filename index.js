@@ -13,7 +13,16 @@ const { v4: uuidv4 } = require("uuid");
 
 // Create an Express app
 const app = express();
-app.use(cors());
+
+const corsOptions = {
+  origin: "https://your-react-app-domain.com", // Replace with your React app's domain
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Allow credentials (e.g., cookies)
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 
 app.use(express.static("public"));
@@ -23,8 +32,8 @@ app.use("/uploads", express.static("uploads"));
 // MySQL configuration
 const db = mysql.createConnection({
   host: "localhost",
-  user: "burblanks",
-  password: "1412fellasfranxP@",
+  user: "root",
+  password: "",
   database: "jin",
 });
 
