@@ -474,7 +474,6 @@ app.post("/api/classrooms", requireAuthentication, (req, res) => {
   const inviteCode = generateInviteCode();
 
   const classroom = {
-    id: generateUniqueId(),
     name,
     invite_code: inviteCode,
     user_id: userId,
@@ -515,7 +514,7 @@ app.post("/api/classrooms", requireAuthentication, (req, res) => {
             const classes = results;
             console.log(classes[0].id);
             const feed = {
-              id,
+              id: generateUniqueId(),
               classroom_id: classes[0].id,
               name: classes[0].name + classes[0].id,
             };
@@ -597,6 +596,7 @@ app.post("/api/classrooms/join", requireAuthentication, (req, res) => {
           if (memberResults.length === 0) {
             // User is not a member, so add them to the classroom
             const classroomMember = {
+              id: generateUniqueId(),
               classroom_id: classroom.id,
               user_id: userId,
             };
@@ -1061,6 +1061,7 @@ app.post(
     }
 
     const assignmentSubmission = {
+      id: generateUniqueId(),
       assignment_id: assignmentId,
       user_id: userId,
       submission_time: submissionTime,
