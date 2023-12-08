@@ -23,8 +23,8 @@ app.use("/uploads", express.static("uploads"));
 // MySQL configuration
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "",
+  user: "burblanks",
+  password: "1412fellasfranxP@",
   database: "jin",
 });
 
