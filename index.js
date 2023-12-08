@@ -8,6 +8,7 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const fs = require("fs");
+const https = require('https');
 
 const { v4: uuidv4 } = require("uuid");
 
@@ -21,13 +22,18 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
+const credentials = {
+  key: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/privkey.pem', 'utf8'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/cert.pem', 'utf8'),
+  ca: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/chain.pem', 'utf8'),
+};
+
 app.use(cors(corsOptions));
-
 app.use(bodyParser.json());
-
 app.use(express.static("public"));
-
 app.use("/uploads", express.static("uploads"));
+
+const server = https.createServer(credentials, app);
 
 // MySQL configuration
 const db = mysql.createConnection({
@@ -1680,8 +1686,7 @@ app.get(
 
 // Start the Express server
 const port = 4049;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
 module.exports = app;
