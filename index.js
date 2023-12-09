@@ -16,10 +16,8 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 
 const corsOptions = {
-  origin: "https://classroom.franx.dev", // Replace with your React app's domain
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  origin:'*',  // Replace with your React app's domain
   credentials: true, // Allow credentials (e.g., cookies)
-  optionsSuccessStatus: 204,
 };
 
 const credentials = {
@@ -28,7 +26,7 @@ const credentials = {
   ca: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/chain.pem', 'utf8'),
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use("/uploads", express.static("uploads"));
@@ -1686,7 +1684,7 @@ app.get(
 
 // Start the Express server
 const port = 4049;
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 module.exports = app;
