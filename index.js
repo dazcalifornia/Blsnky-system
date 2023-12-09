@@ -167,6 +167,7 @@ app.post("/register", (req, res) => {
 
   // Check if the password is missing or empty
   if (!password) {
+    res.setHeader('Access-Control-Allow-Origin', '*')
     return res.status(400).json({ error: "Password is required" });
   }
 
@@ -174,6 +175,7 @@ app.post("/register", (req, res) => {
   bcrypt.hash(password, 10, (err, hash) => {
     if (err) {
       console.error(err);
+      res.setHeader('Access-Control-Allow-Origin', '*')
       return res.status(500).json({ error: "Hashing error" });
     }
 
@@ -189,9 +191,10 @@ app.post("/register", (req, res) => {
     db.query("INSERT INTO users SET ?", user, (err, results) => {
       if (err && err.code === "ER_DUP_ENTRY") {
         console.error(err);
+        res.setHeader('Access-Control-Allow-Origin', '*')
         return res.status(409).json({ error: "Email already exists" });
       }
-
+      res.setHeader('Access-Control-Allow-Origin', '*')
       res.status(201).json({ message: "Registration successful" });
     });
   });
@@ -239,6 +242,7 @@ app.post("/login", (req, res) => {
       req.user = { userId: user.id, role: user.role };
 
       console.log("User role:", req.user.role);
+      res.setHeader('Access-Control-Allow-Origin', '*')
       res.status(200).json({ token, expirationTime });
     });
   });
@@ -280,7 +284,7 @@ app.post(
         console.error(err);
         return res.status(500).json({ error: "Post creation error" });
       }
-
+      res.setHeader('Access-Control-Allow-Origin', '*')
       res.status(201).json({ message: "Post created successfully" });
     });
   }
@@ -319,7 +323,7 @@ app.get("/posts", (req, res) => {
 
       return post;
     });
-
+    res.setHeader('Access-Control-Allow-Origin', '*')
     res.status(200).json(postsWithImagesAndFiles);
   });
 });
@@ -330,7 +334,7 @@ app.post("/logout", requireAuthentication, (req, res) => {
 
   // Add the token to the blacklist (in-memory)
   invalidTokens.add(token);
-
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.status(200).json({ message: "Logout successful" });
 });
 
@@ -379,6 +383,7 @@ function requireAdminRole(req, res, next) {
 }
 
 app.get("/admin", requireAdminRole, (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.json({ message: "Admin route accessed" });
 });
 
@@ -424,7 +429,7 @@ app.post(
                   .status(500)
                   .json({ error: "Profile creation error" });
               }
-
+              res.setHeader('Access-Control-Allow-Origin', '*')
               res.status(201).json({ message: "Profile created successfully" });
             }
           );
@@ -438,7 +443,7 @@ app.post(
                 console.error(err);
                 return res.status(500).json({ error: "Profile update error" });
               }
-
+              res.setHeader('Access-Control-Allow-Origin', '*')
               res.status(200).json({ message: "Profile updated successfully" });
             }
           );
@@ -568,7 +573,7 @@ app.post("/api/classrooms", requireAuthentication, (req, res) => {
                 console.log(results);
               }
             );
-
+            res.setHeader('Access-Control-Allow-Origin', '*')
             res
               .status(200)
               .json({ message: "Classroom created successfully", classes });
@@ -590,6 +595,7 @@ app.get("/api/own-class", requireAuthentication, (req, res) => {
         console.error(err);
         return res.status(500).json({ error: "Error fetching classrooms" });
       }
+      res.setHeader('Access-Control-Allow-Origin', '*')
       res.status(200).json(results);
     }
   );
@@ -645,7 +651,7 @@ app.post("/api/classrooms/join", requireAuthentication, (req, res) => {
                     .status(500)
                     .json({ error: "Joining classroom error" });
                 }
-
+                res.setHeader('Access-Control-Allow-Origin', '*')
                 res
                   .status(200)
                   .json({ message: "Joined classroom successfully" });
@@ -675,7 +681,7 @@ app.get("/api/classrooms", requireAuthentication, (req, res) => {
           console.error(err);
           return res.status(500).json({ error: "Classroom retrieval error" });
         }
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         const joinedClass = results.map((result) => result.classroom_id);
         res.status(200).json({ joinedClass });
       }
@@ -718,6 +724,7 @@ app.get(
                     .status(500)
                     .json({ error: "Classroom can't be fetched" });
                 }
+                res.setHeader('Access-Control-Allow-Origin', '*')
                 res.status(200).json({ classroom });
               }
             );
@@ -735,7 +742,7 @@ app.get(
                 if (memberResults.length === 0) {
                   return res.status(403).json({ error: "Not a member" });
                 }
-
+                res.setHeader('Access-Control-Allow-Origin', '*')
                 res.status(200).json({ classroom });
               }
             );
@@ -773,7 +780,7 @@ app.post(
           .status(500)
           .json({ error: "Feed creation error", details: err.message });
       }
-
+      res.setHeader('Access-Control-Allow-Origin', '*')
       res.status(201).json({ message: "Feed created successfully" });
     });
   }
@@ -795,7 +802,7 @@ app.get(
           console.error(err);
           return res.status(500).json({ error: "Feed retrieval error" });
         }
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         res.status(200).json({ results });
       }
     );
@@ -818,7 +825,7 @@ app.get(
           console.error(err);
           return res.status(500).json({ error: "Post retrieval error" });
         }
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         res.status(200).json({ results });
       }
     );
@@ -867,7 +874,7 @@ app.post(
               .status(500)
               .json({ error: "Post creation error", details: err.message });
           }
-
+          res.setHeader('Access-Control-Allow-Origin', '*')
           res.status(201).json({ message: "Post created successfully" });
         });
       }
@@ -906,7 +913,7 @@ app.post(
           .status(500)
           .json({ error: "Assignment creation error", details: err.message });
       }
-
+      res.setHeader('Access-Control-Allow-Origin', '*')
       res.status(201).json({ message: "Assignment created successfully" });
     });
   }
@@ -947,7 +954,7 @@ app.get(
                   .status(500)
                   .json({ error: "Assignment retrieval error" });
               }
-
+              res.setHeader('Access-Control-Allow-Origin', '*')
               res.status(200).json({ assignments: assignmentResults });
               console.log("assignment:", assignmentResults);
             }
@@ -984,7 +991,7 @@ app.get(
                   .status(500)
                   .json({ error: "Assignment retrieval error" });
               }
-
+              res.setHeader('Access-Control-Allow-Origin', '*')
               res.status(200).json({ assignments: assignmentResults });
               console.log("assignment:", assignmentResults);
             }
@@ -1016,6 +1023,7 @@ app.get(
               .status(500)
               .json({ error: "Submission retrieval error" });
           }
+          res.setHeader('Access-Control-Allow-Origin', '*')
           res.status(200).json({ submissions: submissionResult });
           console.log("submission", submissionResult);
         }
@@ -1056,6 +1064,7 @@ app.get(
                   .status(500)
                   .json({ error: "Submission retrieval error" });
               }
+              res.setHeader('Access-Control-Allow-Origin', '*')
               console.log("submission", submissionResult);
               res.status(200).json({
                 assignments: assignmentResult,
@@ -1111,7 +1120,7 @@ app.post(
           console.error(err);
           return res.status(500).json({ error: "Assignment submission error" });
         }
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         res.status(201).json({ message: "Assignment submitted successfully" });
       }
     );
@@ -1153,7 +1162,7 @@ app.get(
             status: submission.score !== null ? "Scored" : "Pending",
             // Add any other relevant information you want to include
           }));
-
+          res.setHeader('Access-Control-Allow-Origin', '*')
           console.log("All submitted assignments:", submissions);
           res.status(200).json(submissions);
         }
@@ -1179,7 +1188,7 @@ app.get(
               : [],
             // Add any other relevant information you want to include
           }));
-
+          res.setHeader('Access-Control-Allow-Origin', '*')
           console.log("User's submitted assignments:", submissions);
           res.status(200).json(submissions);
         }
@@ -1221,7 +1230,7 @@ app.get(
             : [],
           // Add any other relevant information you want to include
         }));
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         console.log("User's submitted assignments:", submissions);
         res.status(200).json(submissions);
       }
@@ -1256,7 +1265,7 @@ app.post(
           console.error(err);
           return res.status(500).json({ error: "Scoring assignment error" });
         }
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         res.status(200).json({ message: "Assignment scored successfully" });
       }
     );
@@ -1281,6 +1290,7 @@ app.get(
             .status(500)
             .json({ error: "Error fetching assignment scores and feedback" });
         }
+        res.setHeader('Access-Control-Allow-Origin', '*')
         res.status(200).json({ scoresAndFeedback: results });
       }
     );
@@ -1313,7 +1323,7 @@ app.post(
           console.error(err);
           return res.status(500).json({ error: "Error reporting plagiarism" });
         }
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         res.status(201).json({ message: "Plagiarism reported successfully" });
       }
     );
@@ -1341,7 +1351,7 @@ app.post("/api/workspaces", requireAuthentication, (req, res) => {
       console.error("Error creating workspace:", error);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-
+    res.setHeader('Access-Control-Allow-Origin', '*')
     console.log("Workspace created successfully");
     res.status(201).json(results);
   });
@@ -1359,6 +1369,7 @@ app.get("/api/workspaces", requireAuthentication, (req, res) => {
         console.error(err);
         return res.status(500).json({ error: "Error fetching workspaces" });
       }
+      res.setHeader('Access-Control-Allow-Origin', '*')
       console.log("sending workspace:", results);
       res.status(200).json(results);
     }
@@ -1373,6 +1384,7 @@ app.get("/api/workspaces/details/:id", requireAuthentication, (req, res) => {
       console.error(err);
       return res.status(500).json({ error: "Error fetching workspaces" });
     }
+    res.setHeader('Access-Control-Allow-Origin', '*')
     console.log("sending workspace:", results);
     res.status(200).json(results);
   });
@@ -1400,7 +1412,7 @@ app.post("/api/workspaces/invite", requireAuthentication, (req, res) => {
       console.error("Error inviting user:", error);
       return res.status(500).json({ error: "Internal Server Error" });
     }
-
+    res.setHeader('Access-Control-Allow-Origin', '*')
     console.log("Invitation sent successfully");
     res.status(201).json(results);
   });
@@ -1438,7 +1450,7 @@ app.post("/api/workspaces/add-user", requireAuthentication, (req, res) => {
           console.error("Error adding user to workspace:", addMemberError);
           return res.status(500).json({ error: "Internal Server Error" });
         }
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         console.log("User added to workspace successfully");
         res.status(201).json(addMemberResults);
       }
@@ -1534,7 +1546,7 @@ app.post(
         console.error("Error creating post:", error);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-
+      res.setHeader('Access-Control-Allow-Origin', '*')
       console.log("Post created successfully");
       res.status(201).json(results);
     });
@@ -1570,7 +1582,7 @@ app.post(
           console.error("Error creating comment:", error);
           return res.status(500).json({ error: "Internal Server Error" });
         }
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         console.log("Comment created successfully");
         res.status(201).json(results);
       });
@@ -1603,7 +1615,7 @@ app.post(
         console.error("Error saving file information:", error);
         return res.status(500).json({ error: "Internal Server Error" });
       }
-
+      res.setHeader('Access-Control-Allow-Origin', '*')
       console.log("File information saved successfully");
       res.status(201).json(results);
     });
@@ -1648,7 +1660,7 @@ app.get(
             files,
           };
         });
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         console.log("Fetching posts:", postsWithSplitFiles);
         res.status(200).json(postsWithSplitFiles);
       }
@@ -1693,7 +1705,7 @@ app.get(
             files,
           };
         });
-
+        res.setHeader('Access-Control-Allow-Origin', '*')
         console.log("spliting comments:", postsWithSplitFiles);
 
         console.log("Fetching comments:", results);
