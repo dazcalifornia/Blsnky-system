@@ -16,32 +16,40 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 
 const corsOptions = {
-  origin: "https://your-react-app-domain.com", // Replace with your React app's domain
+  origin: "https://classroom.franx.dev", // Replace with your React app's domain
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // Allow credentials (e.g., cookies)
   optionsSuccessStatus: 204,
 };
 
-const credentials = {
-  key: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/privkey.pem', 'utf8'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/cert.pem', 'utf8'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/chain.pem', 'utf8'),
-};
+// const credentials = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/privkey.pem', 'utf8'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/cert.pem', 'utf8'),
+//   ca: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/chain.pem', 'utf8'),
+// };
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use("/uploads", express.static("uploads"));
 
-const server = https.createServer(credentials, app);
+// const server = https.createServer(credentials, app);
 
 // MySQL configuration
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "",
+//   database: "jin",
+// });
+
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "",
+  user: "burblanks",
+  password: "1412fellasfranxP@",
   database: "jin",
 });
+
 
 function connectToDatabase() {
   db.connect((err) => {
