@@ -16,7 +16,7 @@ const { v4: uuidv4 } = require("uuid");
 const app = express();
 
 const corsOptions = {
-  origin: "https://classroom.franx.dev", // Replace with your React app's domain
+  origin: "*", // Replace with your React app's domain
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // Allow credentials (e.g., cookies)
   optionsSuccessStatus: 204,
