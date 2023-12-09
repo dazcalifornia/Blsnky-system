@@ -26,7 +26,7 @@ const credentials = {
   ca: fs.readFileSync('/etc/letsencrypt/live/server.franx.dev/chain.pem', 'utf8'),
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use("/uploads", express.static("uploads"));
