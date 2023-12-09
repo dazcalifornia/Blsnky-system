@@ -43,12 +43,7 @@ const db = mysql.createConnection({
   database: "jin",
 });
 
-// const db = mysql.createConnection({
-//   host: "localhost",
-//   user: "burblanks",
-//   password: "1412fellasfranxP@",
-//   database: "jin",
-// });
+
 
 
 function connectToDatabase() {
@@ -471,8 +466,8 @@ app.get("/profile", requireAuthentication, (req, res) => {
 });
 
 
-app.get("/userInfo", requireAuthentication, (req, res) => {
-  const userId = req.body.userId; // Get user ID from JWT token
+app.get("/userInfo/:userId", requireAuthentication, (req, res) => {
+  const userId = req.params.userId; // Get user ID from JWT token
   db.query(
     "SELECT * FROM users WHERE user_id = ?",
     [userId],
