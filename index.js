@@ -470,6 +470,28 @@ app.get("/profile", requireAuthentication, (req, res) => {
   );
 });
 
+
+app.get("/userInfo", requireAuthentication, (req, res) => {
+  const userId = req.body.userId; // Get user ID from JWT token
+  db.query(
+    "SELECT * FROM users WHERE user_id = ?",
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Error fetching profile" });
+      }
+      //prepare the profile data
+      const profileData = {
+        id: results[0].id,
+        username: results[0].username,
+        email: results[0].email,
+      };
+      res.status(200).json(profileData);
+    }
+  );
+});
+
 app.get("/api/user-role", requireAuthentication, (req, res) => {
   const userRole = req.user.role; // Get user role from JWT token
   const uid = req.user.userId;
@@ -1289,6 +1311,7 @@ app.post(
   "/api/classrooms/:classroomId/assignments/:assignmentId/report-plagiarism",
   requireAuthentication,
   (req, res) => {
+    const id = generateUniqueId()
     const classroomId = req.params.classroomId;
     const assignmentId = req.params.assignmentId;
     const teacherId = req.user.userId; // Get teacher's user ID from JWT token
@@ -1303,8 +1326,8 @@ app.post(
 
     // Implement code to report plagiarism cases
     db.query(
-      "INSERT INTO plagiarism_reports (teacher_id, classroom_id, assignment_id, submission_id, report_reason) VALUES (?, ?, ?, ?, ?)",
-      [teacherId, classroomId, assignmentId, submissionId, reportReason],
+      "INSERT INTO plagiarism_reports (id,teacher_id, classroom_id, assignment_id, submission_id, report_reason) VALUES (?,?, ?, ?, ?, ?)",
+      [id,teacherId, classroomId, assignmentId, submissionId, reportReason],
       (err, results) => {
         if (err) {
           console.error(err);
