@@ -457,6 +457,7 @@ app.get("/profile", requireAuthentication, (req, res) => {
     (err, results) => {
       if (err) {
         console.error(err);
+        res.setHeader('Access-Control-Allow-Origin', '*')
         return res.status(500).json({ error: "Error fetching profile" });
       }
       //prepare the profile data
@@ -465,6 +466,7 @@ app.get("/profile", requireAuthentication, (req, res) => {
         bio: results[0].bio,
         profile_picture: results[0].profile_picture,
       };
+      res.setHeader('Access-Control-Allow-Origin', '*')
       res.status(200).json(profileData);
     }
   );
@@ -473,6 +475,7 @@ app.get("/profile", requireAuthentication, (req, res) => {
 app.get("/api/user-role", requireAuthentication, (req, res) => {
   const userRole = req.user.role; // Get user role from JWT token
   const uid = req.user.userId;
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.status(200).json({ role: userRole, uid: uid });
 });
 
