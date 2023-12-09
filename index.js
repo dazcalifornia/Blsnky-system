@@ -155,6 +155,12 @@ const assignmentSubmissionStorage = multer.diskStorage({
 // Create an instance of the multer middleware
 const uploadAssignment = multer({ storage: assignmentSubmissionStorage });
 
+
+app.get("/",(req,res)=>{
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.send("Hello World")
+})
+
 app.post("/register", (req, res) => {
   const { username, email, password } = req.body;
   console.log("Received Request Body:", req.body); // Log the request body
@@ -237,6 +243,8 @@ app.post("/login", (req, res) => {
     });
   });
 });
+
+
 
 // Create a new post endpoint with optional file uploads
 
