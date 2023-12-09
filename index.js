@@ -167,7 +167,7 @@ app.post("/register", (req, res) => {
 
   // Check if the password is missing or empty
   if (!password) {
-    res.setHeader('Access-Control-Allow-Origin', '*')
+
     return res.status(400).json({ error: "Password is required" });
   }
 
@@ -175,7 +175,7 @@ app.post("/register", (req, res) => {
   bcrypt.hash(password, 10, (err, hash) => {
     if (err) {
       console.error(err);
-      res.setHeader('Access-Control-Allow-Origin', '*')
+
       return res.status(500).json({ error: "Hashing error" });
     }
 
@@ -191,7 +191,7 @@ app.post("/register", (req, res) => {
     db.query("INSERT INTO users SET ?", user, (err, results) => {
       if (err && err.code === "ER_DUP_ENTRY") {
         console.error(err);
-        res.setHeader('Access-Control-Allow-Origin', '*')
+
         return res.status(409).json({ error: "Email already exists" });
       }
       res.setHeader('Access-Control-Allow-Origin', '*')
@@ -462,7 +462,7 @@ app.get("/profile", requireAuthentication, (req, res) => {
     (err, results) => {
       if (err) {
         console.error(err);
-        res.setHeader('Access-Control-Allow-Origin', '*')
+
         return res.status(500).json({ error: "Error fetching profile" });
       }
       //prepare the profile data
